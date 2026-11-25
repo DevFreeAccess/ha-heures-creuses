@@ -36,7 +36,7 @@ WEEKDAYS = [
 ALL_DAYS = [str(i) for i in range(7)]
 PRICE = selector.NumberSelector(
     selector.NumberSelectorConfig(
-        min=0, max=5, step=0.0001, mode=selector.NumberSelectorMode.BOX,
+        min=0, max=5, step="any", mode=selector.NumberSelectorMode.BOX,
         unit_of_measurement="€/kWh",
     )
 )
