@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Heures Creuses / Heures Pleines",
+        "description": "Définissez vos tarifs et vos plages d'heures creuses par défaut. Vous pourrez ajouter des règles par période/année/jour ensuite.",
+        "data": {
+          "name": "Nom",
+          "price_hp": "Prix Heure Pleine (€/kWh)",
+          "price_hc": "Prix Heure Creuse (€/kWh)",
+          "hours": "Plages Heures Creuses (ex : 22:00-06:00, 13:00-15:00)"
+        }
+      }
+    },
+    "error": {
+      "invalid_hours": "Format invalide. Utilisez HH:MM-HH:MM, séparés par des virgules."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Heures Creuses",
+        "menu_options": {
+          "tarifs": "Modifier les tarifs",
+          "add_rule": "Ajouter une règle (période, année, jours)",
+          "delete_rule": "Supprimer des règles"
+        }
+      },
+      "tarifs": {
+        "title": "Tarifs",
+        "data": {
+          "price_hp": "Prix Heure Pleine (€/kWh)",
+          "price_hc": "Prix Heure Creuse (€/kWh)"
+        }
+      },
+      "add_rule": {
+        "title": "Nouvelle règle",
+        "description": "La règle avec la date de début la plus récente est prioritaire. Sans dates, la règle s'applique toute l'année.",
+        "data": {
+          "rule_name": "Nom de la règle",
+          "start_date": "Date de début (optionnel)",
+          "end_date": "Date de fin (optionnel)",
+          "weekdays": "Jours concernés",
+          "hours": "Plages Heures Creuses (ex : 23:00-07:00)"
+        }
+      },
+      "delete_rule": {
+        "title": "Supprimer des règles",
+        "data": { "rules_to_delete": "Règles à supprimer" }
+      }
+    },
+    "error": {
+      "invalid_hours": "Format invalide. Utilisez HH:MM-HH:MM, séparés par des virgules.",
+      "invalid_dates": "La date de fin doit être postérieure à la date de début.",
+      "no_weekdays": "Sélectionnez au moins un jour."
+    }
+  }
+}

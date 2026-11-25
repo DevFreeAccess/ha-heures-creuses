@@ -1,0 +1,13 @@
+{
+  "domain": "heures_creuses",
+  "name": "Heures Creuses",
+  "codeowners": ["@DevFreeAccess"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/DevFreeAccess/ha-heures-creuses",
+  "integration_type": "service",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/DevFreeAccess/ha-heures-creuses/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}

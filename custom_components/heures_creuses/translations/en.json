@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Off-peak / Peak hours",
+        "description": "Set your prices and default off-peak time ranges. You can add rules per period/year/weekday afterwards.",
+        "data": {
+          "name": "Name",
+          "price_hp": "Peak price (€/kWh)",
+          "price_hc": "Off-peak price (€/kWh)",
+          "hours": "Off-peak ranges (e.g. 22:00-06:00, 13:00-15:00)"
+        }
+      }
+    },
+    "error": {
+      "invalid_hours": "Invalid format. Use HH:MM-HH:MM separated by commas."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Off-peak hours",
+        "menu_options": {
+          "tarifs": "Edit prices",
+          "add_rule": "Add a rule (period, year, weekdays)",
+          "delete_rule": "Delete rules"
+        }
+      },
+      "tarifs": {
+        "title": "Prices",
+        "data": {
+          "price_hp": "Peak price (€/kWh)",
+          "price_hc": "Off-peak price (€/kWh)"
+        }
+      },
+      "add_rule": {
+        "title": "New rule",
+        "description": "The rule with the most recent start date wins. Without dates, the rule applies all year.",
+        "data": {
+          "rule_name": "Rule name",
+          "start_date": "Start date (optional)",
+          "end_date": "End date (optional)",
+          "weekdays": "Weekdays",
+          "hours": "Off-peak ranges (e.g. 23:00-07:00)"
+        }
+      },
+      "delete_rule": {
+        "title": "Delete rules",
+        "data": { "rules_to_delete": "Rules to delete" }
+      }
+    },
+    "error": {
+      "invalid_hours": "Invalid format. Use HH:MM-HH:MM separated by commas.",
+      "invalid_dates": "End date must be after start date.",
+      "no_weekdays": "Select at least one day."
+    }
+  }
+}
