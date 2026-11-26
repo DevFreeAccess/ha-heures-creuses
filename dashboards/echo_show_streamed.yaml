@@ -1,0 +1,14 @@
+# Plein écran pour Echo Show en mode « Streamed » (ou tout écran mural)
+# Éditeur de configuration brut d'un NOUVEAU tableau de bord.
+# La vue « panneau » donne toute la place à une seule carte.
+title: Écran électricité
+views:
+  - title: Électricité
+    path: ecran
+    type: panel
+    cards:
+      - type: custom:heures-creuses-card
+        entity: sensor.heures_creuses_periode
+        size: large
+        fill: true
+        height: 88vh   # diminuez (ex. 80vh) si le bas est coupé, augmentez s'il reste une bande

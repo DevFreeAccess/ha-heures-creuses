@@ -12,7 +12,7 @@ from .const import DOMAIN
 from .coordinator import HCCoordinator
 
 _LOGGER = logging.getLogger(__name__)
-CARD_VERSION = "1.3.0"
+CARD_VERSION = "1.3.1"
 CARD_URL = f"/{DOMAIN}/heures-creuses-card.js"
 PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.SELECT]
 

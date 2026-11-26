@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1
+- Carte : options `fill` et `height` pour occuper tout l'écran (vue panneau).
+- Dashboard `echo_show_streamed.yaml` (plein écran).
+
 ## 1.3.0
 - Nouvelle carte Lovelace intégrée `heures-creuses-card` (colorée, adaptative, options compact/taille/couleurs), enregistrée automatiquement.
 - Les cartes Markdown colorées (HTML) sont supprimées : Home Assistant en retire le style.

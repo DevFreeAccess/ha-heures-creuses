@@ -3,7 +3,7 @@
  *   type: custom:heures-creuses-card
  *   entity: sensor.heures_creuses_periode
  */
-const HC_CARD_VERSION = "1.3.0";
+const HC_CARD_VERSION = "1.3.1";
 
 class HeuresCreusesCard extends HTMLElement {
   setConfig(config) {
@@ -18,6 +18,8 @@ class HeuresCreusesCard extends HTMLElement {
       show_season: true,
       show_price: true,
       size: "normal", // small | normal | large
+      fill: false,    // true = occupe tout l'écran (vue « panneau »)
+      height: "88vh", // hauteur utilisée avec fill
       ...config,
     };
     this._key = null;
@@ -56,7 +58,7 @@ class HeuresCreusesCard extends HTMLElement {
     const scale = { small: 0.8, normal: 1, large: 1.6 }[this._config.size] || 1;
     this.shadowRoot.innerHTML = `
       <style>
-        :host { display: block; }
+        :host { display: block; height: 100%; }
         ha-card {
           overflow: hidden; height: 100%;
           container-type: inline-size;
@@ -114,6 +116,7 @@ class HeuresCreusesCard extends HTMLElement {
 
     const q = (s) => this.shadowRoot.querySelector(s);
     const box = q(".box");
+    box.style.minHeight = c.fill && !c.compact ? c.height : "";
     const title = q(".title");
     const price = q(".price");
     const next = q(".next");
