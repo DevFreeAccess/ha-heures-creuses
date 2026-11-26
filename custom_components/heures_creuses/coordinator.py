@@ -11,7 +11,7 @@ from homeassistant.helpers.event import async_track_point_in_time
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.util import dt as dt_util
 
-from .const import DOMAIN, LABEL_HC, LABEL_HP
+from .const import DOMAIN, LABEL_HC, LABEL_HP, SEASON_LABELS
 from .planning import Planning
 
 _LOGGER = logging.getLogger(__name__)
@@ -33,15 +33,17 @@ class HCCoordinator(DataUpdateCoordinator):
         now = dt_util.now()
         planning = Planning.from_options(self.entry.options)
         hc = planning.is_hc(now)
-        price = planning.price(hc)
+        price = planning.price(hc, now.date())
         label = LABEL_HC if hc else LABEL_HP
         nxt = planning.next_change(now)
         next_label = next_price = remaining = None
         if nxt:
             next_label = LABEL_HP if hc else LABEL_HC
-            next_price = planning.price(not hc)
+            next_price = planning.price(not hc, nxt.date())
             remaining = max(0, math.ceil((nxt - now).total_seconds() / 60))
 
+        season = planning.season_name(now.date())
+        season_label = SEASON_LABELS.get(season) if season else "Désactivée"
         message = f"Vous êtes en {label} ({_fmt(price)} €/kWh)"
         if nxt:
             message += (
@@ -65,8 +67,11 @@ class HCCoordinator(DataUpdateCoordinator):
             "next_label": next_label,
             "next_price": next_price,
             "remaining": remaining,
-            "price_hp": planning.price_hp,
-            "price_hc": planning.price_hc,
+            "season": season_label,
+            "season_mode": (self.entry.options.get("seasons") or {}).get("mode", "auto"),
+            "seasons_enabled": planning.seasons_enabled,
+            "price_hp": planning.price(False, now.date()),
+            "price_hc": planning.price(True, now.date()),
             "rules": [r.to_dict() for r in planning.rules],
         }
 

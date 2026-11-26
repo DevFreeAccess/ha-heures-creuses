@@ -23,7 +23,8 @@
         "menu_options": {
           "tarifs": "Edit prices",
           "add_rule": "Add a rule (period, year, weekdays)",
-          "delete_rule": "Delete rules"
+          "delete_rule": "Delete rules",
+          "saisons": "Summer / winter modes (seasons)"
         }
       },
       "tarifs": {
@@ -46,7 +47,24 @@
       },
       "delete_rule": {
         "title": "Delete rules",
-        "data": { "rules_to_delete": "Rules to delete" }
+        "data": {
+          "rules_to_delete": "Rules to delete"
+        }
+      },
+      "saisons": {
+        "title": "Summer / winter modes",
+        "description": "Each season has its own ranges and prices. Only the day and month of the start dates matter (year ignored): the switch repeats every year. Rules with dates or specific weekdays keep priority.",
+        "data": {
+          "seasons_enabled": "Enable seasons",
+          "winter_start": "Winter start (day/month)",
+          "hours_winter": "WINTER off-peak ranges (e.g. 22:00-06:00, 13:00-15:00)",
+          "price_hp_winter": "WINTER peak price (€/kWh)",
+          "price_hc_winter": "WINTER off-peak price (€/kWh)",
+          "summer_start": "Summer start (day/month)",
+          "hours_summer": "SUMMER off-peak ranges (e.g. 23:00-07:00)",
+          "price_hp_summer": "SUMMER peak price (€/kWh)",
+          "price_hc_summer": "SUMMER off-peak price (€/kWh)"
+        }
       }
     },
     "error": {

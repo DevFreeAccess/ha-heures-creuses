@@ -12,6 +12,16 @@ from homeassistant.helpers import selector
 from .const import (
     CONF_DELETE,
     CONF_END,
+    CONF_HOURS_SUMMER,
+    CONF_HOURS_WINTER,
+    CONF_PRICE_HC_SUMMER,
+    CONF_PRICE_HC_WINTER,
+    CONF_PRICE_HP_SUMMER,
+    CONF_PRICE_HP_WINTER,
+    CONF_SEASONS,
+    CONF_SEASONS_ENABLED,
+    CONF_SUMMER_START,
+    CONF_WINTER_START,
     CONF_HOURS,
     CONF_NAME,
     CONF_PRICE_HC,
@@ -85,8 +95,58 @@ class OptionsFlow(config_entries.OptionsFlow):
 
     async def async_step_init(self, user_input=None):
         return self.async_show_menu(
-            step_id="init", menu_options=["tarifs", "add_rule", "delete_rule"]
+            step_id="init", menu_options=["saisons", "tarifs", "add_rule", "delete_rule"]
         )
+
+    async def async_step_saisons(self, user_input=None):
+        errors = {}
+        o = self.config_entry.options
+        cur = o.get(CONF_SEASONS) or {}
+        win = cur.get("hiver") or {}
+        sum_ = cur.get("ete") or {}
+        if user_input is not None:
+            for key in (CONF_HOURS_WINTER, CONF_HOURS_SUMMER):
+                try:
+                    parse_ranges(user_input[key])
+                except ValueError:
+                    errors[key] = "invalid_hours"
+            if not errors:
+                seasons = {
+                    "enabled": user_input[CONF_SEASONS_ENABLED],
+                    "mode": cur.get("mode", "auto"),
+                    "winter_start": user_input[CONF_WINTER_START][5:],
+                    "summer_start": user_input[CONF_SUMMER_START][5:],
+                    "hiver": {
+                        "hours": user_input[CONF_HOURS_WINTER],
+                        "price_hp": user_input[CONF_PRICE_HP_WINTER],
+                        "price_hc": user_input[CONF_PRICE_HC_WINTER],
+                    },
+                    "ete": {
+                        "hours": user_input[CONF_HOURS_SUMMER],
+                        "price_hp": user_input[CONF_PRICE_HP_SUMMER],
+                        "price_hc": user_input[CONF_PRICE_HC_SUMMER],
+                    },
+                }
+                return self._save(**{CONF_SEASONS: seasons})
+        php, phc = o.get(CONF_PRICE_HP), o.get(CONF_PRICE_HC)
+        schema = vol.Schema(
+            {
+                vol.Required(CONF_SEASONS_ENABLED, default=cur.get("enabled", True)): bool,
+                vol.Required(
+                    CONF_WINTER_START, default="2000-" + cur.get("winter_start", "11-01")
+                ): selector.DateSelector(),
+                vol.Required(CONF_HOURS_WINTER, default=win.get("hours", DEFAULT_HOURS)): str,
+                vol.Required(CONF_PRICE_HP_WINTER, default=win.get("price_hp", php)): PRICE,
+                vol.Required(CONF_PRICE_HC_WINTER, default=win.get("price_hc", phc)): PRICE,
+                vol.Required(
+                    CONF_SUMMER_START, default="2000-" + cur.get("summer_start", "04-01")
+                ): selector.DateSelector(),
+                vol.Required(CONF_HOURS_SUMMER, default=sum_.get("hours", DEFAULT_HOURS)): str,
+                vol.Required(CONF_PRICE_HP_SUMMER, default=sum_.get("price_hp", php)): PRICE,
+                vol.Required(CONF_PRICE_HC_SUMMER, default=sum_.get("price_hc", phc)): PRICE,
+            }
+        )
+        return self.async_show_form(step_id="saisons", data_schema=schema, errors=errors)
 
     async def async_step_tarifs(self, user_input=None):
         if user_input is not None:

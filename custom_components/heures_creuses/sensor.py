@@ -17,6 +17,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
             PriceSensor(c),
             NextChangeSensor(c),
             RemainingSensor(c),
+            SeasonSensor(c),
             FixedPriceSensor(c, "prix_hp", "Prix Heure Pleine", "price_hp", "mdi:flash"),
             FixedPriceSensor(c, "prix_hc", "Prix Heure Creuse", "price_hc", "mdi:weather-night"),
         ]
@@ -50,6 +51,7 @@ class PeriodSensor(HCEntity, SensorEntity):
             "prochain_changement": d["next_change"].isoformat() if d["next_change"] else None,
             "heure_prochain_changement": d["next_change"].strftime("%H:%M") if d["next_change"] else None,
             "temps_restant_min": d["remaining"],
+            "saison": d["season"],
             "prix_heure_pleine": d["price_hp"],
             "prix_heure_creuse": d["price_hc"],
             "regles": d["rules"],
@@ -125,3 +127,21 @@ class FixedPriceSensor(HCEntity, SensorEntity):
     @property
     def native_value(self):
         return self.coordinator.data[self._data_key]
+
+
+class SeasonSensor(HCEntity, SensorEntity):
+    """Saison en cours : Été / Hiver (ou Désactivée)."""
+
+    def __init__(self, c):
+        super().__init__(c, "saison", "Saison")
+
+    @property
+    def native_value(self):
+        return self.coordinator.data["season"]
+
+    @property
+    def icon(self):
+        return {
+            "Été": "mdi:white-balance-sunny",
+            "Hiver": "mdi:snowflake",
+        }.get(self.coordinator.data["season"], "mdi:calendar-blank")

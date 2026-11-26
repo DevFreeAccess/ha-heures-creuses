@@ -23,7 +23,8 @@
         "menu_options": {
           "tarifs": "Modifier les tarifs",
           "add_rule": "Ajouter une règle (période, année, jours)",
-          "delete_rule": "Supprimer des règles"
+          "delete_rule": "Supprimer des règles",
+          "saisons": "Modes été / hiver (saisons)"
         }
       },
       "tarifs": {
@@ -46,7 +47,24 @@
       },
       "delete_rule": {
         "title": "Supprimer des règles",
-        "data": { "rules_to_delete": "Règles à supprimer" }
+        "data": {
+          "rules_to_delete": "Règles à supprimer"
+        }
+      },
+      "saisons": {
+        "title": "Modes été / hiver",
+        "description": "Chaque saison a ses plages et ses tarifs. Seuls le jour et le mois des dates de début comptent (l'année est ignorée) : le changement se répète chaque année. Les règles avec dates ou jours précis restent prioritaires.",
+        "data": {
+          "seasons_enabled": "Activer les saisons",
+          "winter_start": "Début de l'hiver (jour/mois)",
+          "hours_winter": "Plages creuses HIVER (ex : 22:00-06:00, 13:00-15:00)",
+          "price_hp_winter": "Prix Heure Pleine HIVER (€/kWh)",
+          "price_hc_winter": "Prix Heure Creuse HIVER (€/kWh)",
+          "summer_start": "Début de l'été (jour/mois)",
+          "hours_summer": "Plages creuses ÉTÉ (ex : 23:00-07:00)",
+          "price_hp_summer": "Prix Heure Pleine ÉTÉ (€/kWh)",
+          "price_hc_summer": "Prix Heure Creuse ÉTÉ (€/kWh)"
+        }
       }
     },
     "error": {

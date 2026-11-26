@@ -76,10 +76,17 @@ class Planning:
     """Ensemble de règles. La règle la plus spécifique (date de début la plus
     récente, puis la dernière ajoutée) l'emporte pour un jour donné."""
 
-    def __init__(self, rules: list[Rule], price_hp: float, price_hc: float) -> None:
+    def __init__(
+        self,
+        rules: list[Rule],
+        price_hp: float,
+        price_hc: float,
+        seasons: dict | None = None,
+    ) -> None:
         self.rules = rules
         self.price_hp = price_hp
         self.price_hc = price_hc
+        self.seasons = seasons or {}
 
     @classmethod
     def from_options(cls, options: dict) -> "Planning":
@@ -87,10 +94,58 @@ class Planning:
             [Rule.from_dict(r) for r in options.get("rules", [])],
             float(options.get("price_hp", 0)),
             float(options.get("price_hc", 0)),
+            options.get("seasons") or {},
         )
+
+    # ---- saisons -------------------------------------------------------
+    @property
+    def seasons_enabled(self) -> bool:
+        return bool(self.seasons.get("enabled"))
+
+    @staticmethod
+    def _md(value: str, default: tuple[int, int]) -> tuple[int, int]:
+        try:
+            m, d = (int(x) for x in str(value).split("-")[-2:])
+            return (m, d)
+        except (ValueError, TypeError):
+            return default
+
+    def season_name(self, d: date) -> str | None:
+        """'hiver', 'ete' ou None si les saisons sont désactivées."""
+        if not self.seasons_enabled:
+            return None
+        mode = self.seasons.get("mode", "auto")
+        if mode in ("ete", "hiver"):
+            return mode
+        ws = self._md(self.seasons.get("winter_start"), (11, 1))
+        ss = self._md(self.seasons.get("summer_start"), (4, 1))
+        md = (d.month, d.day)
+        if ws == ss:
+            return "hiver"
+        winter = (md >= ws or md < ss) if ws > ss else (ws <= md < ss)
+        return "hiver" if winter else "ete"
+
+    def _season_cfg(self, name: str) -> dict:
+        return self.seasons.get(name) or {}
+
+    def _season_rule(self, d: date) -> Rule | None:
+        name = self.season_name(d)
+        cfg = self._season_cfg(name) if name else {}
+        if not cfg.get("hours"):
+            return None
+        return Rule(name, cfg["hours"])
 
     def select_rule(self, d: date) -> Rule | None:
         cands = [(i, r) for i, r in enumerate(self.rules) if r.matches(d)]
+        if self.seasons_enabled:
+            # Avec les saisons, seules les règles « exceptions » (datées ou
+            # limitées à certains jours) passent avant la saison.
+            cands = [
+                c for c in cands
+                if c[1].start or c[1].end or len(c[1].weekdays) < 7
+            ]
+            if not cands:
+                return self._season_rule(d)
         if not cands:
             return None
         return max(cands, key=lambda c: (c[1].start or date.min, c[0]))[1]
@@ -111,12 +166,23 @@ class Planning:
                     return True
         return False
 
-    def price(self, hc: bool) -> float:
+    def price(self, hc: bool, d: date | None = None) -> float:
+        name = self.season_name(d) if d else None
+        if name:
+            cfg = self._season_cfg(name)
+            key = "price_hc" if hc else "price_hp"
+            if cfg.get(key) is not None:
+                return float(cfg[key])
         return self.price_hc if hc else self.price_hp
 
     def next_change(self, now: datetime) -> datetime | None:
         current = self.is_hc(now)
         times = {time(0, 0)}
+        for name in ("hiver", "ete"):
+            hours = self._season_cfg(name).get("hours")
+            if self.seasons_enabled and hours:
+                for s_, e_ in parse_ranges(hours):
+                    times.update((s_, e_))
         for r in self.rules:
             for s, e in r.ranges:
                 times.update((s, e))

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+- **Modes été / hiver** : plages et tarifs distincts par saison, bascule annuelle automatique.
+- Nouveau sélecteur `Mode saison` (Auto / Été / Hiver) et capteur `Saison`.
+- Les options (règles, tarifs, saisons) s'appliquent sans rechargement de l'intégration.
+- Cartes de tableau de bord adaptatives (téléphone, tablette, écran mural) dans `dashboards/`.
+
 ## 1.1.0
 - Icône et logo affichés dans Home Assistant (dossier `brand/`, HA 2026.3 ou plus récent).
 - Nouveaux capteurs : temps restant avant la bascule, tarifs HP/HC (diagnostic).
