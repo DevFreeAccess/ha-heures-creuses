@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+import math
 from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
@@ -35,10 +36,11 @@ class HCCoordinator(DataUpdateCoordinator):
         price = planning.price(hc)
         label = LABEL_HC if hc else LABEL_HP
         nxt = planning.next_change(now)
-        next_label = next_price = None
+        next_label = next_price = remaining = None
         if nxt:
             next_label = LABEL_HP if hc else LABEL_HC
             next_price = planning.price(not hc)
+            remaining = max(0, math.ceil((nxt - now).total_seconds() / 60))
 
         message = f"Vous êtes en {label} ({_fmt(price)} €/kWh)"
         if nxt:
@@ -62,6 +64,7 @@ class HCCoordinator(DataUpdateCoordinator):
             "next_change": nxt,
             "next_label": next_label,
             "next_price": next_price,
+            "remaining": remaining,
             "price_hp": planning.price_hp,
             "price_hc": planning.price_hc,
             "rules": [r.to_dict() for r in planning.rules],

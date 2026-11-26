@@ -1,5 +1,5 @@
 """Entité de base."""
-from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
@@ -17,6 +17,7 @@ class HCEntity(CoordinatorEntity[HCCoordinator]):
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
             name=entry.title,
+            entry_type=DeviceEntryType.SERVICE,
             manufacturer="Personnalisé",
             model="Heures Creuses / Heures Pleines",
         )

@@ -1,7 +1,8 @@
 """Capteurs."""
 from __future__ import annotations
 
-from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
+from homeassistant.const import EntityCategory, UnitOfTime
 
 from .const import DOMAIN
 from .entity import HCEntity
@@ -15,6 +16,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
             MessageSensor(c),
             PriceSensor(c),
             NextChangeSensor(c),
+            RemainingSensor(c),
+            FixedPriceSensor(c, "prix_hp", "Prix Heure Pleine", "price_hp", "mdi:flash"),
+            FixedPriceSensor(c, "prix_hc", "Prix Heure Creuse", "price_hc", "mdi:weather-night"),
         ]
     )
 
@@ -31,7 +35,7 @@ class PeriodSensor(HCEntity, SensorEntity):
 
     @property
     def icon(self):
-        return "mdi:flash-outline" if self.coordinator.data["is_hc"] else "mdi:flash"
+        return "mdi:weather-night" if self.coordinator.data["is_hc"] else "mdi:flash"
 
     @property
     def extra_state_attributes(self):
@@ -44,6 +48,8 @@ class PeriodSensor(HCEntity, SensorEntity):
             "prochaine_periode": d["next_label"],
             "prochain_prix": d["next_price"],
             "prochain_changement": d["next_change"].isoformat() if d["next_change"] else None,
+            "heure_prochain_changement": d["next_change"].strftime("%H:%M") if d["next_change"] else None,
+            "temps_restant_min": d["remaining"],
             "prix_heure_pleine": d["price_hp"],
             "prix_heure_creuse": d["price_hc"],
             "regles": d["rules"],
@@ -86,3 +92,36 @@ class NextChangeSensor(HCEntity, SensorEntity):
     @property
     def native_value(self):
         return self.coordinator.data["next_change"]
+
+
+class RemainingSensor(HCEntity, SensorEntity):
+    """Minutes restantes avant la prochaine bascule."""
+
+    _attr_device_class = SensorDeviceClass.DURATION
+    _attr_native_unit_of_measurement = UnitOfTime.MINUTES
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_icon = "mdi:timer-sand"
+
+    def __init__(self, c):
+        super().__init__(c, "temps_restant", "Temps restant")
+
+    @property
+    def native_value(self):
+        return self.coordinator.data["remaining"]
+
+
+class FixedPriceSensor(HCEntity, SensorEntity):
+    """Tarif HP ou HC configuré (diagnostic)."""
+
+    _attr_native_unit_of_measurement = "€/kWh"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_suggested_display_precision = 4
+
+    def __init__(self, c, key, name, data_key, icon):
+        super().__init__(c, key, name)
+        self._data_key = data_key
+        self._attr_icon = icon
+
+    @property
+    def native_value(self):
+        return self.coordinator.data[self._data_key]
