@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+- Nouvelle carte Lovelace intégrée `heures-creuses-card` (colorée, adaptative, options compact/taille/couleurs), enregistrée automatiquement.
+- Les cartes Markdown colorées (HTML) sont supprimées : Home Assistant en retire le style.
+
 ## 1.2.0
 - **Modes été / hiver** : plages et tarifs distincts par saison, bascule annuelle automatique.
 - Nouveau sélecteur `Mode saison` (Auto / Été / Hiver) et capteur `Saison`.

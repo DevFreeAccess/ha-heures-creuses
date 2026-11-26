@@ -1,0 +1,10 @@
+# Toutes les options de la carte
+type: custom:heures-creuses-card
+entity: sensor.heures_creuses_periode
+color_hc: "#1e88e5"   # couleur Heure Creuse
+color_hp: "#e53935"   # couleur Heure Pleine
+size: normal          # small | normal | large
+compact: false        # true = une seule ligne
+show_price: true      # afficher le prix
+show_next: true       # afficher le prochain changement
+show_season: true     # afficher le badge Été / Hiver

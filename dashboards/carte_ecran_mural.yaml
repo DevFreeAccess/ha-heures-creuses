@@ -1,10 +1,4 @@
-# Très grand affichage (tablette murale, TV en mode kiosque)
-type: markdown
-content: |-
-  {% set hc = is_state('binary_sensor.heures_creuses_heure_creuse', 'on') %}
-  {% set prix = states('sensor.heures_creuses_prix_actuel') | float(0) %}
-  <div style="box-sizing:border-box;width:100%;min-height:50vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:1em;border-radius:1.2em;color:#fff;background:{{ '#1e88e5' if hc else '#e53935' }}">
-  <div style="font-size:clamp(2rem,9vw,7rem);font-weight:800;line-height:1.1">{{ 'Heure Creuse' if hc else 'Heure Pleine' }}</div>
-  <div style="font-size:clamp(1.5rem,5vw,4rem)">{{ ('%.4f' | format(prix)) | replace('.', ',') }} €/kWh</div>
-  <div style="font-size:clamp(1rem,2.5vw,2rem);opacity:.9">{{ state_attr('sensor.heures_creuses_periode', 'prochaine_periode') }} à {{ state_attr('sensor.heures_creuses_periode', 'heure_prochain_changement') }}</div>
-  </div>
+# Très grand affichage (tablette murale, TV)
+type: custom:heures-creuses-card
+entity: sensor.heures_creuses_periode
+size: large

@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/DevFreeAccess/ha-heures-creuses/main/images/banner.png" alt="Heures Creuses pour Home Assistant" width="100%">
+  <img src="https://raw.githubusercontent.com/VOTRE-COMPTE/ha-heures-creuses/main/images/banner.png" alt="Heures Creuses pour Home Assistant" width="100%">
 </p>
 
 <p align="center">
   <a href="https://hacs.xyz"><img alt="HACS" src="https://img.shields.io/badge/HACS-Custom-orange.svg"></a>
-  <a href="https://github.com/DevFreeAccess/ha-heures-creuses/releases"><img alt="Version" src="https://img.shields.io/github/v/release/DevFreeAccess/ha-heures-creuses"></a>
-  <a href="https://github.com/DevFreeAccess/ha-heures-creuses/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/DevFreeAccess/ha-heures-creuses/actions/workflows/validate.yml/badge.svg"></a>
+  <a href="https://github.com/VOTRE-COMPTE/ha-heures-creuses/releases"><img alt="Version" src="https://img.shields.io/github/v/release/VOTRE-COMPTE/ha-heures-creuses"></a>
+  <a href="https://github.com/VOTRE-COMPTE/ha-heures-creuses/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/VOTRE-COMPTE/ha-heures-creuses/actions/workflows/validate.yml/badge.svg"></a>
   <img alt="Licence" src="https://img.shields.io/badge/licence-MIT-blue.svg">
 </p>
 
@@ -15,7 +15,7 @@ Sachez à tout moment si vous êtes en **Heure Creuse** ou en **Heure Pleine**, 
 
 > **Vous êtes en Heure Creuse (0,1696 €/kWh)** – Heure Pleine à partir de 06:00
 
-![Aperçu](https://raw.githubusercontent.com/DevFreeAccess/ha-heures-creuses/main/images/preview.png)
+![Aperçu](https://raw.githubusercontent.com/VOTRE-COMPTE/ha-heures-creuses/main/images/preview.png)
 
 ## ✨ Fonctionnalités
 
@@ -77,19 +77,28 @@ Votre contrat change selon la saison ? Dans **Configurer → Modes été / hiver
 
 ## 🖼️ Tableau de bord
 
-Des cartes prêtes à copier se trouvent dans le dossier [`dashboards/`](dashboards). Elles s'adaptent à la largeur de l'écran, du téléphone à la tablette murale.
+L'intégration embarque sa propre carte, **`heures-creuses-card`** : colorée (bleu = creuse, rouge = pleine), adaptative (téléphone, tablette, écran mural) et sans ressource à installer.
 
-| Fichier | Usage |
-|---|---|
-| [`carte_couleur.yaml`](dashboards/carte_couleur.yaml) | Carte bleue / rouge complète : période, prix, prochain changement, saison |
-| [`carte_native.yaml`](dashboards/carte_native.yaml) | Sans HTML, la plus compatible |
-| [`carte_compacte.yaml`](dashboards/carte_compacte.yaml) | Une ligne, pour petit écran ou bandeau |
-| [`carte_ecran_mural.yaml`](dashboards/carte_ecran_mural.yaml) | Très grand affichage |
-| [`selecteur_saison.yaml`](dashboards/selecteur_saison.yaml) | Changer de mode en un clic |
+**Ajouter la carte**
+1. Redémarrez Home Assistant après l'installation, puis rechargez la page (`Ctrl+F5`).
+2. Tableau de bord → ⋮ → *Modifier* → **+ Ajouter une carte** → cherchez **Heures Creuses**.
+3. Choisissez l'entité `sensor.heures_creuses_periode`, ou passez par l'éditeur de code (⋮ de la fenêtre de la carte → *Afficher l'éditeur de code*) et saisissez :
 
-**Utiliser une carte :** ouvrez votre tableau de bord → ⋮ → *Modifier* → **+ Ajouter une carte** → tout en bas **Manuel** → collez le contenu du fichier → **Enregistrer**.
+```yaml
+type: custom:heures-creuses-card
+entity: sensor.heures_creuses_periode
+```
 
-> Si vous avez donné un autre nom que « Heures Creuses » à l'intégration, remplacez `heures_creuses` dans les identifiants (Paramètres → Entités, recherche « heures »).
+| Option | Valeur | Rôle |
+|---|---|---|
+| `compact` | `true` / `false` | Une seule ligne |
+| `size` | `small` / `normal` / `large` | Taille du texte |
+| `color_hc`, `color_hp` | `"#1e88e5"` | Couleurs creuse / pleine |
+| `show_price`, `show_next`, `show_season` | `true` / `false` | Éléments affichés |
+
+Des exemples prêts à copier sont dans [`dashboards/`](dashboards) : [couleur](dashboards/carte_couleur.yaml), [compacte](dashboards/carte_compacte.yaml), [écran mural](dashboards/carte_ecran_mural.yaml), [personnalisée](dashboards/carte_personnalisee.yaml), [sélecteur de saison](dashboards/selecteur_saison.yaml) et [version 100 % native](dashboards/carte_native.yaml) (cartes tuiles standard, sans carte dédiée).
+
+> ⚠️ Collez le YAML dans l'**éditeur de code** de la carte, pas dans le champ « Contenu » d'une carte Markdown. Si vous avez renommé l'intégration, adaptez le nom de l'entité (Paramètres → Entités, recherche « heures »).
 
 ## 🤖 Automatisation (exemple)
 
@@ -115,13 +124,13 @@ Dans Paramètres → Tableaux de bord → Énergie, pour votre consommation rés
 
 Copiez le dossier `custom_components/heures_creuses` dans `/config/custom_components/`, puis redémarrez Home Assistant.
 
-Via HACS : menu ⋮ → *Dépôts personnalisés* → URL `https://github.com/DevFreeAccess/ha-heures-creuses` → catégorie *Intégration*.
+Via HACS : menu ⋮ → *Dépôts personnalisés* → URL `https://github.com/VOTRE-COMPTE/ha-heures-creuses` → catégorie *Intégration*.
 
 </details>
 
 ## 🐞 Problème ou idée ?
 
-Ouvrez une [issue](https://github.com/DevFreeAccess/ha-heures-creuses/issues) en précisant votre version de Home Assistant et les lignes du journal contenant `heures_creuses`.
+Ouvrez une [issue](https://github.com/VOTRE-COMPTE/ha-heures-creuses/issues) en précisant votre version de Home Assistant et les lignes du journal contenant `heures_creuses`.
 
 ## Licence
 
