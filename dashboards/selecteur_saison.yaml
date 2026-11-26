@@ -1,0 +1,6 @@
+# Changer de mode (Auto / Été / Hiver) en un clic
+type: tile
+entity: select.heures_creuses_mode_saison
+name: Mode saison
+features:
+  - type: select-options

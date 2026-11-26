@@ -1,0 +1,5 @@
+# Une seule ligne : idéale pour un petit écran, un widget ou un bandeau en haut de page
+type: markdown
+content: |-
+  {% set hc = is_state('binary_sensor.heures_creuses_heure_creuse', 'on') %}
+  <div style="box-sizing:border-box;width:100%;padding:.5em .9em;border-radius:.7em;color:#fff;text-align:center;font-size:clamp(.85rem,3.6vw,1.1rem);font-weight:600;background:{{ '#1e88e5' if hc else '#e53935' }}">{{ states('sensor.heures_creuses_message') }}</div>
